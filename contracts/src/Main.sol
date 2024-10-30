@@ -9,6 +9,7 @@ contract Main is Ownable{
   // ---------------------- Variables ----------------------
   uint private collectionCounter;
   mapping(uint => Collection) private collections;
+  mapping(string => uint) private collectionName2Id;
   mapping(address => uint[]) private userTokens; // mapping of user addresses to their tokenIds.
   mapping(address => bool) private userExists; // to check if user exists
   mapping(uint => uint) tokenToCollection; // mapping of token id to collection id (so we can get card's metadata based on the collection id)
@@ -30,8 +31,18 @@ contract Main is Ownable{
     require(_cardCount > 0, "Card count must be greater than 0");
     Collection newCollection = new Collection(_name, _cardCount); 
     collections[collectionCounter] = newCollection;
+    collectionName2Id[_name] = collectionCounter;
     emit CollectionCreated(address(newCollection), _name, _cardCount, collectionCounter);
     collectionCounter++;
+  }
+
+  function getCollectionIdFromName(string calldata collectionName) public view returns (uint) {
+    return collectionName2Id[collectionName];
+  }
+
+  function getCollectionFromName(string calldata collectionName) public view returns (Collection) {
+    uint cid=collectionName2Id[collectionName];
+    return collections[cid];
   }
 
   // ---------------------- Functions ----------------------
