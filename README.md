@@ -1,3 +1,19 @@
+# HOW TO RUN
+
+1. Start blockchain/front-end with yarn dev
+2. Run backend:
+  2.1. from backend, activate .serverenv then "flask -app server run"
+
+# WHAT TO DO:
+
+1. Add functions to contracts to make interacting easier (e.g. get all cards, get all collections... in a way that is easy to read offchain)
+2. Add backend handlers for the rest of the functions we'll need
+3. Add frontend elements:
+  3.1. Homepage
+  3.2. All collections (and all cards)
+  3.3. Users
+  3.4. Create/mint new collection (& card)
+
 # Collectible Card Game
 
 Welcome to the DAAR project. The idea will be to implement a Collectible Card Game
