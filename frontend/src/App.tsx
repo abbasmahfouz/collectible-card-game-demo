@@ -72,7 +72,7 @@ export const App = () => {
     for (let k of Object.keys(data)) {
       ret.push(data[k])
     }
-    setCollections(ret)
+    listNames(ret)
     return ret
   }
 
@@ -80,12 +80,6 @@ export const App = () => {
     e.preventDefault()
     const form = e.target
     const formData = new FormData(form)
-
-    // const send = {
-    //   address: formData["address"],
-    //   tokenURI: formData["tokenURI"],
-    //   collectionId: formData["collectionId"]
-    // }
 
     const resp = await fetch(
         SERVER+"mintCard",
@@ -104,20 +98,22 @@ export const App = () => {
           method: 'GET'
         }
       )
-    const data = await resp
+    const data = await resp.json()
     console.log(data)
   }
 
-  const [collections,setCollections] = useState([]);
+  // const [collections,setCollections] = useState([]);
 
   // getCollectionNames()
   // console.log(collections)
-  const listNames = () => {
+  const listNames = (collections) => {
     const listItems = collections.map(name => <li> {name} </li>)
-    return <ul>{listItems}</ul>
+    setCollHTML(<ul>{listItems}</ul>)
   } 
   // getCollectionNames()
   // const listedNames = listNames()
+
+  const [collHTML, setCollHTML] = useState(<ul> </ul>)
 
   return (
     <div className={styles.body}>
@@ -161,8 +157,9 @@ export const App = () => {
       <button onClick={getCollectionNames} > getCollectionNames </button> 
      
       <button onClick={getAllCollections} > getAllCollections </button>
+     
       <h1> Available collections </h1>
-      {listNames()}
+      {collHTML}
     </div>
   )
 }

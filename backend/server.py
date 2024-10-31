@@ -105,6 +105,6 @@ def getAllCollections():
 	# for n in collectionNames:
 	# 	ret[counter] = n
 	# 	counter+=1
-	resp = make_response("OK")
+	resp = make_response(collection_cards)
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp
