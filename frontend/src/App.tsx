@@ -3,6 +3,8 @@ import styles from './styles.module.css'
 import * as ethereum from '@/lib/ethereum'
 import * as main from '@/lib/main'
 
+const SERVER = "http://127.0.0.1:5001/"
+
 type Canceler = () => void
 const useAffect = (
   asyncEffect: () => Promise<Canceler | void>,
@@ -42,33 +44,13 @@ const useWallet = () => {
 export const App = () => {
   // const wallet = useWallet()
 
-  const createCollection = async () => {
-
-
-
-    const send = {
-      name: "test",
-      count: 2
-    }
-
-    const resp = await fetch(
-        "http://127.0.0.1:5000/createCollection",
-        {
-          method: 'POST',
-          body: JSON.stringify(send),
-        }
-      )
-    const data = await resp
-    console.log(data)
-  } 
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const form = e.target
     const formData = new FormData(form)
     console.log(formData)
     const resp = await fetch(
-      "http://127.0.0.1:5000/createCollection",
+      SERVER+"createCollection",
       {
         method: form.method,
         body: formData
@@ -81,13 +63,18 @@ export const App = () => {
   const getCollectionNames = async () => {
 
     const resp = await fetch(
-        "http://127.0.0.1:5000/getCollectionNames",
+        SERVER+"getCollectionNames",
         {
           method: 'GET'
         }
       )
     const data = await resp.json()
-    console.log(data)
+    const ret = []
+    for (let k of Object.keys(data)) {
+      ret.push(data[k])
+    }
+    setCollections(ret)
+    return ret
   }
 
   const mintCard = async () => {
@@ -98,19 +85,18 @@ export const App = () => {
     }
 
     const resp = await fetch(
-        "http://127.0.0.1:5000/mintCard",
+        SERVER+"mintCard",
         {
           method: 'POST',
           body: JSON.stringify(send),
         }
       )
     const data = await resp
-    console.log(data)
   }
 
   const getAllCollections = async () => {
     const resp = await fetch(
-        "http://127.0.0.1:5000/getAllCollections",
+        SERVER+"getAllCollections",
         {
           method: 'GET'
         }
@@ -118,6 +104,17 @@ export const App = () => {
     const data = await resp
     console.log(data)
   }
+
+  const [collections,setCollections] = useState([]);
+
+  // getCollectionNames()
+  // console.log(collections)
+  const listNames = () => {
+    const listItems = collections.map(name => <li> {name} </li>)
+    return <ul>{listItems}</ul>
+  } 
+  // getCollectionNames()
+  // const listedNames = listNames()
 
   return (
     <div className={styles.body}>
@@ -134,6 +131,8 @@ export const App = () => {
       <button onClick={getCollectionNames} > getCollectionNames </button> 
       <button onClick={mintCard} > mintCard </button>
       <button onClick={getAllCollections} > getAllCollections </button>
+      <h1> Available collections </h1>
+      {listNames()}
     </div>
   )
 }
