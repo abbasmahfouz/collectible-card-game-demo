@@ -65,7 +65,7 @@ export const App = () => {
     const resp = await fetch(
         "http://127.0.0.1:5000/getCollectionNames",
         {
-          method: 'GET',
+          method: 'GET'
         }
       )
     const data = await resp.json()
@@ -90,12 +90,24 @@ export const App = () => {
     console.log(data)
   }
 
+  const getAllCollections = async () => {
+    const resp = await fetch(
+        "http://127.0.0.1:5000/getAllCollections",
+        {
+          method: 'GET'
+        }
+      )
+    const data = await resp
+    console.log(data)
+  }
+
   return (
     <div className={styles.body}>
       <h1>Welcome to Pokémon TCG </h1>
       <button onClick={createCollection} > createCollection </button> 
       <button onClick={getCollectionNames} > getCollectionNames </button> 
       <button onClick={mintCard} > mintCard </button>
+      <button onClick={getAllCollections} > getAllCollections </button>
     </div>
   )
 }

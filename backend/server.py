@@ -79,7 +79,6 @@ def mintCard():
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp
 
-
 #Basic way of calling view function
 @app.route("/getCollectionNames",methods=['GET'])
 def getCollectionNames():
@@ -90,5 +89,22 @@ def getCollectionNames():
 		ret[counter] = n
 		counter+=1
 	resp = make_response(ret)
+	resp.headers['Access-Control-Allow-Origin'] = '*'
+	return resp
+
+#Basic way of calling view function
+@app.route("/getAllCollections",methods=['GET'])
+def getAllCollections():
+	allCollectionNames = contract.functions.getCollectionNames().call()
+	print(allCollectionNames)
+	collection_cards = {}
+	for c in allCollectionNames:
+		collection_cards[c] = contract.functions.getCardsFromCollectionName(c).call()
+	print(collection_cards)
+	# counter = 0
+	# for n in collectionNames:
+	# 	ret[counter] = n
+	# 	counter+=1
+	resp = make_response("OK")
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp

@@ -45,6 +45,10 @@ contract Main is Ownable{
     return collections[cid];
   }
 
+  function getCardsFromCollectionName(string calldata collectionName) public view returns (uint[] memory, string[] memory) {
+    return getCollectionFromName(collectionName).getAllCards();
+  }
+
   // ---------------------- Functions ----------------------
 
   // Mint a new card in the collection with the given collection ID
@@ -101,5 +105,13 @@ contract Main is Ownable{
       collectionNames[i] = collections[i].getCollectionName();
     }
     return collectionNames;
+  }
+
+  function getAllCollections() external view returns(Collection[] memory) {
+    Collection[] memory ret = new Collection[](collectionCounter);
+    for (uint i =0;i<collectionCounter;i++) {
+      ret[i]=(collections[i]);
+    }
+    return ret;
   }
 }
