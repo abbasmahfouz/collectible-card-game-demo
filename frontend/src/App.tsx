@@ -44,11 +44,11 @@ const useWallet = () => {
 export const App = () => {
   // const wallet = useWallet()
 
-  const handleSubmit = async (e) => {
+  const createCollectionSubmit = async (e) => {
     e.preventDefault()
     const form = e.target
     const formData = new FormData(form)
-    console.log(formData)
+
     const resp = await fetch(
       SERVER+"createCollection",
       {
@@ -57,7 +57,6 @@ export const App = () => {
         }
     )
     const data = await resp
-    console.log(data)
   }
 
   const getCollectionNames = async () => {
@@ -77,18 +76,22 @@ export const App = () => {
     return ret
   }
 
-  const mintCard = async () => {
-    const send = {
-      address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-      tokenURI: "test0",
-      collectionId: 0
-    }
+  const mintCardSubmit = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const formData = new FormData(form)
+
+    // const send = {
+    //   address: formData["address"],
+    //   tokenURI: formData["tokenURI"],
+    //   collectionId: formData["collectionId"]
+    // }
 
     const resp = await fetch(
         SERVER+"mintCard",
         {
           method: 'POST',
-          body: JSON.stringify(send),
+          body: formData
         }
       )
     const data = await resp
@@ -118,8 +121,15 @@ export const App = () => {
 
   return (
     <div className={styles.body}>
+
+    {/* ---------------------------------------------------------------------- */}
       <h1>Welcome to Pokémon TCG </h1>
-      <form method="post" onSubmit={handleSubmit}>
+    
+    {/* -------------------- CREATE COLLECTION ----------------------------- */}
+
+      <h1>Create collection </h1>
+
+      <form method="post" onSubmit={createCollectionSubmit}>
       <label>
         new collection name: <input name="collectionName"/>
       </label>
@@ -128,8 +138,28 @@ export const App = () => {
       </label>
       <button type="submit" > createCollection </button> 
       </form>
+   {/* --------------------- MINT CARD ------------------------------ */}
+       
+      <h1>Mint card </h1>
+       
+      
+      <form method="post" onSubmit={mintCardSubmit}>
+      <label>
+        User receiving NFT: <input name="address"/>
+      </label>
+      <label>
+         Card URI: <input name="tokenURI"/>
+      </label>
+      <label>
+         CollectionID: <input name="collectionId"/>
+      </label>
+      <button type="submit" > mintCard </button>
+      </form>
+    
+    {/* ---------------------------------------------------------------------- */}
+
       <button onClick={getCollectionNames} > getCollectionNames </button> 
-      <button onClick={mintCard} > mintCard </button>
+     
       <button onClick={getAllCollections} > getAllCollections </button>
       <h1> Available collections </h1>
       {listNames()}

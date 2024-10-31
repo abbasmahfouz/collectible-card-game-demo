@@ -64,7 +64,7 @@ def createCollection():
 
 @app.route("/mintCard",methods=['POST'])
 def mintCard():
-	received_args=json.loads((request.data.decode('UTF-8')))
+	received_args=request.form
 	
 	#TODO: Checks on argument type
 	args = []
