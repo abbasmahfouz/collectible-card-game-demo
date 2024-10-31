@@ -44,6 +44,8 @@ export const App = () => {
 
   const createCollection = async () => {
 
+
+
     const send = {
       name: "test",
       count: 2
@@ -59,6 +61,22 @@ export const App = () => {
     const data = await resp
     console.log(data)
   } 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const form = e.target
+    const formData = new FormData(form)
+    console.log(formData)
+    const resp = await fetch(
+      "http://127.0.0.1:5000/createCollection",
+      {
+        method: form.method,
+        body: formData
+        }
+    )
+    const data = await resp
+    console.log(data)
+  }
 
   const getCollectionNames = async () => {
 
@@ -104,7 +122,15 @@ export const App = () => {
   return (
     <div className={styles.body}>
       <h1>Welcome to Pokémon TCG </h1>
-      <button onClick={createCollection} > createCollection </button> 
+      <form method="post" onSubmit={handleSubmit}>
+      <label>
+        new collection name: <input name="collectionName"/>
+      </label>
+      <label>
+         new collection card count: <input name="collectionCardCount"/>
+      </label>
+      <button type="submit" > createCollection </button> 
+      </form>
       <button onClick={getCollectionNames} > getCollectionNames </button> 
       <button onClick={mintCard} > mintCard </button>
       <button onClick={getAllCollections} > getAllCollections </button>

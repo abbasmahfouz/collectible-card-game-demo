@@ -49,11 +49,11 @@ app = Flask(__name__)
 #then use call_function to do transaction
 @app.route("/createCollection",methods=['POST'])
 def createCollection():
-	received_args=json.loads((request.data.decode('UTF-8')))
+
 	#TODO: Checks on argument type
 	args = []
-	args.append("\""+received_args["name"]+"\"") 
-	args.append(str(received_args["count"]))
+	args.append("\""+request.form["collectionName"]+"\"") 
+	args.append(str(request.form["collectionCardCount"]))
 
 	#TODO: add try/catch to format response
 

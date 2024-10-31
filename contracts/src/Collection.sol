@@ -57,9 +57,9 @@ contract Collection is ERC721URIStorage, Ownable {
   }
 
   function getAllCards() external view returns (uint[] memory, string[] memory) {
-    uint[]  memory allCardID= new uint[](cardCount);
-    string[] memory allCardURI= new string[](cardCount);
-    for (uint i=0;i<cardCount;i++) {
+    uint[]  memory allCardID= new uint[](tokenIdCounter);
+    string[] memory allCardURI= new string[](tokenIdCounter);
+    for (uint i=0;i<tokenIdCounter;i++) {
       allCardID[i]=cards[i].tokenId;
       allCardURI[i]=cards[i].tokenURI;
     }
