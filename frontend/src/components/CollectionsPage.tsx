@@ -77,7 +77,7 @@ const CollectionsPage: React.FC = () => {
       };
 
     return (
-        <div className="container mt-4">
+        <Container className="container mt-4">
       <h2 className="text-center mb-4">Available Collections</h2>
     
         
@@ -109,7 +109,7 @@ const CollectionsPage: React.FC = () => {
         </Row>
       )}
 
-    </div>
+    </Container>
     );
   };
 

@@ -5,8 +5,8 @@ import CollectionsPage from './components/CollectionsPage';
 import NavBar from './components/NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// import UsersPage from './components/UsersPage';
-// import CardsCollection from './components/CardsCollection';
+import UsersPage from './components/UsersPage';
+import CardsCollection from './components/CardsCollection';
 
 import styles from './styles.module.css'
 
@@ -55,8 +55,8 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/collections" element={<CollectionsPage/>} />
-        {/* <Route path="/users" element={UserPage} /> */}
-        {/* <Route path="/cards/:collectionId" element={CardsCollection} /> */}
+        <Route path="/users" element={<UsersPage/>} />
+        <Route path="/collections/:collectionId" element={<CardsCollection/>} />
       </Routes>
       </div>
     </Router>
