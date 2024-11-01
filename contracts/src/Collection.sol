@@ -7,13 +7,15 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Collection is ERC721URIStorage, Ownable {
   string public collectionName;
+  string public collectionURI;
   uint public cardCount;
   uint private tokenIdCounter;
   mapping(uint => Card) public cards; // mapping of token id to card
 
 
-  constructor(string memory _name, uint _cardCount) ERC721(_name, "PNFT") Ownable(msg.sender)  {
+  constructor(string memory _name, string memory _collectionURI, uint _cardCount) ERC721(_name, "PNFT") Ownable(msg.sender)  {
     collectionName = _name;
+    collectionURI = _collectionURI;
     cardCount = _cardCount;
     tokenIdCounter = 0;
   }
@@ -54,6 +56,10 @@ contract Collection is ERC721URIStorage, Ownable {
   function getCard(uint _tokenId) external view returns (Card memory) {
     require(cards[_tokenId].tokenId == _tokenId, "Card does not exist");
     return cards[_tokenId];
+  }
+
+  function getCollectionURI() external view returns (string memory) {
+    return collectionURI;
   }
 
   function getAllCards() external view returns (uint[] memory, string[] memory) {

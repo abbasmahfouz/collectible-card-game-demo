@@ -27,9 +27,9 @@ contract Main is Ownable{
   // ---------------------- Creation ----------------------
 
   // Create a new collection with the given name and card count
-  function createCollection(string calldata _name, uint _cardCount) external onlyOwner {
+  function createCollection(string calldata _name, string calldata _collectionURI, uint _cardCount) external onlyOwner {
     require(_cardCount > 0, "Card count must be greater than 0");
-    Collection newCollection = new Collection(_name, _cardCount); 
+    Collection newCollection = new Collection(_name, _collectionURI, _cardCount); 
     collections[collectionCounter] = newCollection;
     collectionName2Id[_name] = collectionCounter;
     emit CollectionCreated(address(newCollection), _name, _cardCount, collectionCounter);
@@ -48,6 +48,12 @@ contract Main is Ownable{
   function getCardsFromCollectionName(string calldata collectionName) public view returns (uint[] memory, string[] memory) {
     return getCollectionFromName(collectionName).getAllCards();
   }
+
+  function getCollectionURIFromName(string calldata name) external view returns (string memory) {
+    uint cid = getCollectionIdFromName(name);
+    string memory ret = collections[cid].getCollectionURI();
+    return ret;
+  } 
 
   // ---------------------- Functions ----------------------
 

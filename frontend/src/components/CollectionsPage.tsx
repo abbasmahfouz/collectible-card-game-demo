@@ -21,6 +21,7 @@ const CollectionsPage: React.FC = () => {
     const [collections, setCollections] = useState<Collection[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [colNames, setColNames] = useState([])
     
     // connect to the contract and get all the collection names
     // const getAllCollections = async () => {
@@ -67,11 +68,44 @@ const CollectionsPage: React.FC = () => {
             { collectionId: 7, cName: "Collection Seven", imageUrl: "https://via.placeholder.com/150" },
             { collectionId: 8, cName: "Collection Eight" , imageUrl: "https://via.placeholder.com/150"},
         ];
-        setCollections(mockCollections);
+
+        const getCollectionInfo = async () => {
+
+
+                  const resp = await fetch(
+                      SERVER+"getAllCollections",
+                    )
+
+                  const data = await resp.json()
+
+                  // const collectionsImages = Object.keys(data).map(
+                  //     c=> ({
+                  //       imageUrl: await fetch("https://images.pokemontcg.io/base2/symbol.png")
+                  //     })
+                  //   )
+                  const collectionsDisplay = Object.keys(data).map(
+                          c => ({
+                            collectionId: data[c]['uri'],
+                            cName: c,
+                            imageUrl: "https://images.pokemontcg.io/"+data[c]["uri"]+"/symbol.png"
+                          })
+                        )
+
+                  setCollections(collectionsDisplay)
+                  return data
+        }
+        
+        getCollectionInfo()
+
+        // const collectionsDisplay = colNames.map(c => ({
+        //   collectionsId: c
+        // })) 
+
+        // setCollections(mockCollections);
         setIsLoading(false);
     }, []);
 
-    const handleCollectionClick = (collectionId: number) => {
+    const handleCollectionClick = (collectionId) => {
         // go to cards page of the collection
         navigateToPage(`/collections/${collectionId}`);
       };
