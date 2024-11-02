@@ -115,8 +115,12 @@ const CollectionsPage: React.FC = () => {
                 onClick={() => handleCollectionClick(collection.collectionId)}
                 style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
               >
-                <Card.Body>
-                  <Card.Title>{collection.cName}</Card.Title>
+                <Card.Body className='d-flex align-items-center'>
+                  <img src={collection.imageUrl} 
+                  alt={`Collection ${collection.cName} Logo`} 
+                  style={{ width: '30px', height: '30px', marginRight: '10px' }} 
+                  />
+                  <Card.Title className="mb-0">{collection.cName}</Card.Title>
                 </Card.Body>
               </Card>
             </Col>
