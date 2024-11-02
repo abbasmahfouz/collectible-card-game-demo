@@ -1,11 +1,24 @@
 import React from 'react';
 import styles from '../styles.module.css'
-
+import { useNavigate } from 'react-router-dom';
+    
 const HomePage: React.FC = () => {
+    const navigate = useNavigate();
+    const handleButtonClick = () => {
+        navigate('/collections');
+    }
     return (
-        <div className="container mt-4">
-            <h1 className={styles.title}>Welcome to <br /> PokémonTCG</h1>
+        <div className={styles.homepage}>
+            
+            <div className={styles.titleContainer}>
+            <h1 className={styles.homepageTitle}>
+                Welcome to <br /> PokémonTCG
+            </h1>
             <p className={styles.description}>Explore collections, view users, and more.</p>
+        </div>
+        
+        <button className={styles.exploreButton} onClick = {handleButtonClick}>Start Exploring</button>
+
         </div>
     );
 }
