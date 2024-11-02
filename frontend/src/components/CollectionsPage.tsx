@@ -56,62 +56,47 @@ const CollectionsPage: React.FC = () => {
     //     getAllCollections();
     // }, [contract]);
 
-        // Mock data to display collections
-    useEffect(() => {
-        const mockCollections = [
-            { collectionId: 1, cName: "Collection One", imageUrl: "https://via.placeholder.com/150" },
-            { collectionId: 2, cName: "Collection Two" , imageUrl: "https://via.placeholder.com/150"},
-            { collectionId: 3, cName: "Collection Three", imageUrl: "https://via.placeholder.com/150" },
-            { collectionId: 4, cName: "Collection Four" , imageUrl: "https://via.placeholder.com/150"},
-            { collectionId: 5, cName: "Collection Five", imageUrl: "https://via.placeholder.com/150" },
-            { collectionId: 6, cName: "Collection Six" , imageUrl: "https://via.placeholder.com/150"},
-            { collectionId: 7, cName: "Collection Seven", imageUrl: "https://via.placeholder.com/150" },
-            { collectionId: 8, cName: "Collection Eight" , imageUrl: "https://via.placeholder.com/150"},
-        ];
 
         const getCollectionInfo = async () => {
+          try{
+            setIsLoading(true);
+            setError(null);
 
+            const resp = await fetch(SERVER+"getAllCollections");
+            if (!resp.ok) throw new Error("Failed to fetch collections");
 
-                  const resp = await fetch(
-                      SERVER+"getAllCollections",
-                    )
-
-                  const data = await resp.json()
+            const data = await resp.json()
 
                   // const collectionsImages = Object.keys(data).map(
                   //     c=> ({
                   //       imageUrl: await fetch("https://images.pokemontcg.io/base2/symbol.png")
                   //     })
                   //   )
-                  const collectionsDisplay = Object.keys(data).map(
+            const collectionsDisplay = Object.keys(data).map(
                           c => ({
                             collectionId: data[c]['uri'],
                             cName: c,
                             imageUrl: "https://images.pokemontcg.io/"+data[c]["uri"]+"/symbol.png"
-                          })
-                        )
+                          }));
 
-                  setCollections(collectionsDisplay)
-                  return data
+            setCollections(collectionsDisplay)
+          } catch (e) {
+            setError("Failed to load collections. Please try again later.");
+        } finally {
+            setIsLoading(false); // Stop loading
         }
-        
-        getCollectionInfo()
+    };
 
-        // const collectionsDisplay = colNames.map(c => ({
-        //   collectionsId: c
-        // })) 
-
-        // setCollections(mockCollections);
-        setIsLoading(false);
+    useEffect(() => {
+        getCollectionInfo();
     }, []);
 
-    const handleCollectionClick = (collectionId) => {
-        // go to cards page of the collection
-        navigateToPage(`/collections/${collectionId}`);
-      };
-
+    const handleCollectionClick = (collectionId: number) => {
+      navigateToPage(`/collections/${collectionId}`);
+  };
+  
     return (
-        <div className="container mt-4">
+        <Container className="container mt-4">
       <h2 className="text-center mb-4">Available Collections</h2>
     
         
@@ -143,7 +128,7 @@ const CollectionsPage: React.FC = () => {
         </Row>
       )}
 
-    </div>
+    </Container>
     );
   };
 
