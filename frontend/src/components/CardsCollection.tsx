@@ -8,7 +8,7 @@ interface CardItem{
 }
 
 const CardsCollection: React.FC = () => {
-    const { collectionId } = useParams<{ collectionId: string }>(); // Retrieve collection ID from URL
+    const { collectionId } = useParams<{ collectionId: string }>(); 
     const [cards, setCards] = useState<CardItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
