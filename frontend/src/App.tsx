@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from './components/HomePage';
 import CollectionsPage from './components/CollectionsPage';
+import MintPage from './components/MintPage';
 import NavBar from './components/NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -55,8 +56,9 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/collections" element={<CollectionsPage/>} />
+        <Route path="/treasury" element={<MintPage/>} />
         <Route path="/users" element={<UsersPage/>} />
-        <Route path="/collections/:collectionId" element={<CardsCollection/>} />
+        <Route path="/collection/:collectionId" element={<CardsCollection/>} />
       </Routes>
       </div>
     </Router>

@@ -13,6 +13,7 @@ const NavBar: React.FC  = () => {
             <Nav className="me-auto">
                 <Nav.Link as={Link} to="/collections">Collections</Nav.Link>
                 <Nav.Link as={Link} to="/users">Users</Nav.Link>
+                <Nav.Link as={Link} to="/treasury">Mint</Nav.Link>
             </Nav>
             </Container>
         </Navbar>
