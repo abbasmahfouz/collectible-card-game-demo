@@ -13,6 +13,7 @@ contract Main is Ownable{
   mapping(address => uint[]) private userTokens; // mapping of user addresses to their tokenIds.
   mapping(address => bool) private userExists; // to check if user exists
   mapping(uint => uint) tokenToCollection; // mapping of token id to collection id (so we can get card's metadata based on the collection id)
+  mapping(string => uint) private collectionURI2Id;
 
   constructor() Ownable(msg.sender) {
     collectionCounter = 0;
@@ -32,6 +33,7 @@ contract Main is Ownable{
     Collection newCollection = new Collection(_name, _collectionURI, _cardCount); 
     collections[collectionCounter] = newCollection;
     collectionName2Id[_name] = collectionCounter;
+    collectionURI2Id[_collectionURI] = collectionCounter;
     emit CollectionCreated(address(newCollection), _name, _cardCount, collectionCounter);
     collectionCounter++;
   }
@@ -49,7 +51,11 @@ contract Main is Ownable{
     return getCollectionFromName(collectionName).getAllCards();
   }
 
-  function getCollectionURIFromName(string calldata name) external view returns (string memory) {
+  function getCollectionIdFromURI(string calldata name) external view returns (uint) {
+    return collectionURI2Id[name];
+  } 
+
+   function getCollectionURIFromName(string calldata name) external view returns (string memory) {
     uint cid = getCollectionIdFromName(name);
     string memory ret = collections[cid].getCollectionURI();
     return ret;

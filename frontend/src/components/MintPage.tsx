@@ -3,12 +3,14 @@ import { Card, Spinner, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 //import useWallet from '@/wallet/useWallet';
 import styles from '../styles.module.css'
+import { ethers } from 'ethers'
 
 const SERVER = "http://127.0.0.1:5001/"
 const isLoading = false
 // const [collections, setCollections] = useState([]) 
 // var collections = []
-const error = null
+
+const owneraddr = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
 
 const createCollectionSubmit = async (e) => {
     e.preventDefault()
@@ -28,6 +30,27 @@ const createCollectionSubmit = async (e) => {
 
 const MintPage: React.FC = () => {
 	const [collections, setCollections] = useState([])
+	const [userAccount,setUserAccount] = useState(null)
+	const [error,setError] = useState(null)
+
+	const getWallet = async (requestAccounts=true) => {
+            const ethereum = (window as any).ethereum
+            if (ethereum) {
+                 if (requestAccounts) {
+                    await ethereum.request({ method: 'eth_requestAccounts' })
+                    const provider = new ethers.providers.Web3Provider(ethereum as any)
+                    const accounts = await provider.listAccounts()
+                    console.log(accounts)    
+                    const account = accounts[0]
+                    const signer = provider.getSigner()
+                    setUserAccount(account)
+                    if (account!=owneraddr) {
+                    	setError("unauthorized user")
+                    }
+                }
+            }
+        }
+  getWallet()
 
 	const getPokemonCollections = async () => {
 		const chainresp = await fetch(
@@ -45,7 +68,8 @@ const MintPage: React.FC = () => {
 					collectionID: o["id"],
 					cName: o["name"],
 					imageUrl: o["images"]["symbol"],
-					onChain: chainCollections.indexOf(o["id"]) > -1
+					onChain: chainCollections.indexOf(o["id"]) > -1,
+					count: o["total"]
 				})
 			)
 
@@ -63,8 +87,26 @@ const MintPage: React.FC = () => {
 		else return 'success' 
 	}
 
-	const handleClick = () => {
+	const handleClick = async (colID,colName,colCount) => {
+		    
+		    const formData = new FormData()
+		    formData.append("collectionName",colName)
+		    formData.append("collectionURI",colID)
+		    formData.append("collectionCardCount",colCount)
+			// const send = {
+			// 	collectionName: colName,
+			// 	collectionURI: colID,
+			// 	colCount: colCount
+			// }
 
+		    const resp = await fetch(
+		    SERVER+"createCollection",
+		    {
+		        method: 'POST',
+		        body: formData
+		        }
+		    )
+		    const data = await resp
 	}
 
 	return (
@@ -106,7 +148,7 @@ const MintPage: React.FC = () => {
               <Card            
                 className="shadow-sm hover-card"
                 bg= {getColor(collection.onChain)}
-                onClick = {() => handleClick()}
+                onClick = {() => handleClick(collection.collectionID,collection.cName,collection.count)}
                 // when we click on a collection, go to the cards page of that collection
                 style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
               >

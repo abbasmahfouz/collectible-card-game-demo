@@ -65,13 +65,18 @@ def createCollection():
 
 @app.route("/mintCard",methods=['POST'])
 def mintCard():
+
+
+
 	received_args=request.form
 	
+	collectionId = contract.functions.getCollectionIdFromURI(received_args["collectionId"]).call()
+
 	#TODO: Checks on argument type
 	args = []
 	args.append("\""+received_args["address"]+"\"") 
 	args.append("\""+received_args["tokenURI"]+"\"") 
-	args.append(str(received_args["collectionId"]))
+	args.append(str(collectionId))
 
 	#TODO: add try/catch to format response
 
@@ -99,15 +104,26 @@ def getAllCollections():
 	allCollectionNames = contract.functions.getCollectionNames().call()
 	print(allCollectionNames)
 	collection_dict = {}
+	allCardURIs=[]
 	for c in allCollectionNames:
 		collection_item = {}
-		collection_item["cards"] = contract.functions.getCardsFromCollectionName(c).call()
-		collection_item["uri"] = contract.functions.getCollectionURIFromName(c).call()
+		collection_item["cards"]=[]
+		cards = contract.functions.getCardsFromCollectionName(c).call()
+		chainIDs = contract.functions.getCollectionURIFromName(c).call()
+		collection_card = {}
+		for i in range(len(cards[0])):
+			collection_card["uri"] = cards[1][i]
+			allCardURIs.append(cards[1][i])
+			collection_card["chain-id"] = cards[0][i]
+			collection_item["cards"].append(collection_card)
+		# print(chainIDs)
+		collection_item["uri"] = chainIDs
 		collection_dict[c] =  collection_item
 	# counter = 0
 	# for n in collectionNames:
 	# 	ret[counter] = n
 	# 	counter+=1
+	collection_dict["all-card-URIs"] = allCardURIs 
 	resp = make_response(collection_dict)
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp

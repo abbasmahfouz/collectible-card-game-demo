@@ -67,7 +67,9 @@ const CollectionsPage: React.FC = () => {
 
             const data = await resp.json()
 
-            const collectionsDisplay = Object.keys(data).map(
+            console.log(data)
+
+            const collectionsDisplay = Object.keys(data).slice(0,-1).map(
                           c => ({
                             collectionId: data[c]['uri'],
                             cName: c,
@@ -113,7 +115,6 @@ const CollectionsPage: React.FC = () => {
                 onClick={() => handleCollectionClick(collection.collectionId)}
                 style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
               >
-                <Card.Img variant="top" src={collection.imageUrl} alt={collection.cName} />
                 <Card.Body>
                   <Card.Title>{collection.cName}</Card.Title>
                 </Card.Body>
