@@ -4,6 +4,7 @@ import HomePage from './components/HomePage';
 import CollectionsPage from './components/CollectionsPage';
 import MintPage from './components/MintPage';
 import NavBar from './components/NavBar';
+import Footer from './components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import UsersPage from './components/UsersPage';
@@ -61,6 +62,7 @@ export const App = () => {
         <Route path="/collection/:collectionId" element={<CardsCollection/>} />
       </Routes>
       </div>
+      <Footer />
     </Router>
   );
 }
