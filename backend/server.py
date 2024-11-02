@@ -111,3 +111,10 @@ def getAllCollections():
 	resp = make_response(collection_dict)
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp
+
+@app.route("/getCollectionURIs")
+def getCollectionURIS():
+	allCollectionURIs = contract.functions.getCollectionURIs().call()
+	resp = make_response(allCollectionURIs)
+	resp.headers['Access-Control-Allow-Origin'] = '*'
+	return resp

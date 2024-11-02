@@ -113,10 +113,10 @@ contract Main is Ownable{
     return collectionNames;
   }
 
-  function getAllCollections() external view returns(Collection[] memory) {
-    Collection[] memory ret = new Collection[](collectionCounter);
+  function getCollectionURIs() external view returns(string[] memory) {
+    string[] memory ret = new string[](collectionCounter);
     for (uint i =0;i<collectionCounter;i++) {
-      ret[i]=(collections[i]);
+      ret[i]=(collections[i].getCollectionURI());
     }
     return ret;
   }

@@ -58,8 +58,9 @@ export const App = () => {
         <Route path="/" element={<HomePage/>} />
         <Route path="/collections" element={<CollectionsPage/>} />
         <Route path="/treasury" element={<MintPage/>} />
+        <Route path="/treasury/:collectionId" element={<MintPage/>} />
         <Route path="/users" element={<UsersPage/>} />
-        <Route path="/collection/:collectionId" element={<CardsCollection/>} />
+        <Route path="/collections/:collectionId" element={<addCollectionPage/>} />
       </Routes>
       </div>
       <Footer />

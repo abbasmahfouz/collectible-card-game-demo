@@ -1,10 +1,14 @@
-import React, {useEffect, useState } from 'react';
+import React, {useEffect, useState, useRef } from 'react';
 import { Card, Spinner, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 //import useWallet from '@/wallet/useWallet';
 import styles from '../styles.module.css'
 
 const SERVER = "http://127.0.0.1:5001/"
+const isLoading = false
+// const [collections, setCollections] = useState([]) 
+// var collections = []
+const error = null
 
 const createCollectionSubmit = async (e) => {
     e.preventDefault()
@@ -21,7 +25,48 @@ const createCollectionSubmit = async (e) => {
     const data = await resp
 }
 
+
 const MintPage: React.FC = () => {
+	const [collections, setCollections] = useState([])
+
+	const getPokemonCollections = async () => {
+		const chainresp = await fetch(
+				SERVER+"getCollectionURIs"
+			)
+		const chainCollections = await chainresp.json()
+		const pokeresp = await fetch(
+				"https://api.pokemontcg.io/v2/sets"
+			)
+		const pokeData = await pokeresp.json()
+		console.log(pokeData["data"])
+		
+		const pokeCollections = pokeData["data"].map(
+				o => ({
+					collectionID: o["id"],
+					cName: o["name"],
+					imageUrl: o["images"]["symbol"],
+					onChain: chainCollections.indexOf(o["id"]) > -1
+				})
+			)
+
+		console.log(pokeCollections)
+		setCollections(pokeCollections)
+		// collections=pokeCollections
+	}
+
+	useEffect(() => {
+        getPokemonCollections();
+    }, []);
+
+	const getColor = (c) => {
+		if (c==false) return 'light'
+		else return 'success' 
+	}
+
+	const handleClick = () => {
+
+	}
+
 	return (
 		<div>
 		<h1> Mint page </h1>
@@ -42,7 +87,41 @@ const MintPage: React.FC = () => {
 			 <button type="submit" > createCollection </button> 
 			</form>
 			</div>
-		</div>
+	  <Container className="container mt-4">
+      <h2 className="text-center mb-4">Available Collections</h2>
+    
+        
+      {isLoading ? (
+        // show spinner while loading
+        <Spinner animation="border" role="status" aria-label="Loading collections">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      ) : error ? (
+        <div className="text-danger text-center">{error}</div>
+      ) : (
+        // show collections in cards bootstrap
+        <Row>
+          {collections.map((collection) => (
+            <Col key={collection.collectionID} sm={6} md={4} lg={3} className="mb-4">
+              <Card            
+                className="shadow-sm hover-card"
+                bg= {getColor(collection.onChain)}
+                onClick = {() => handleClick()}
+                // when we click on a collection, go to the cards page of that collection
+                style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
+              >
+                
+                <Card.Body>
+                  <Card.Title>{collection.cName}</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
+
+    </Container>
+    </div>
 	)
 }
 

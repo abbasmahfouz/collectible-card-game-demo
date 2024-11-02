@@ -67,11 +67,6 @@ const CollectionsPage: React.FC = () => {
 
             const data = await resp.json()
 
-                  // const collectionsImages = Object.keys(data).map(
-                  //     c=> ({
-                  //       imageUrl: await fetch("https://images.pokemontcg.io/base2/symbol.png")
-                  //     })
-                  //   )
             const collectionsDisplay = Object.keys(data).map(
                           c => ({
                             collectionId: data[c]['uri'],
