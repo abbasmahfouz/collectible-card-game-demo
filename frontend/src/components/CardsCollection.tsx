@@ -140,9 +140,6 @@ const CardsCollection: React.FC = () => {
                             style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
                             >
                                 <Card.Img variant="top" src={card.imageUrl} alt={`Card ${card.cardId}`} />
-                                <Card.Body>
-                                    <Card.Title>{card.name}</Card.Title>
-                                </Card.Body>
                             </Card>
                             
                         </Col>
