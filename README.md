@@ -2,7 +2,7 @@
 
 1. Start blockchain/front-end with yarn dev
 2. Run backend:
-  2.1. from backend, activate .serverenv then "flask -app server run"
+  2.1. from backend, activate .serverenv then "flask --app server run -p 5001"
 
 # WHAT TO DO:
 

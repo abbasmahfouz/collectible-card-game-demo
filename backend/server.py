@@ -104,8 +104,6 @@ def getAllCollections():
 		collection_item["cards"] = contract.functions.getCardsFromCollectionName(c).call()
 		collection_item["uri"] = contract.functions.getCollectionURIFromName(c).call()
 		collection_dict[c] =  collection_item
-	print(collection_item["cards"])
-	print(collection_item)
 	# counter = 0
 	# for n in collectionNames:
 	# 	ret[counter] = n
