@@ -60,7 +60,7 @@ export const App = () => {
         <Route path="/treasury" element={<MintPage/>} />
         {/*<Route path="/treasury/:collectionId" element={<MintPage/>} />*/}
         <Route path="/users" element={<UsersPage/>} />
-        <Route path="/collections/:collectionId" element={<CardsCollection/>} />
+        <Route path="/collections/:collectionId" element={<CardsCollection />} />
       </Routes>
       </div>
       <Footer />

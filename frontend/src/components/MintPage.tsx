@@ -111,25 +111,10 @@ const MintPage: React.FC = () => {
 
 	return (
 		<div>
-		<h1> Mint page </h1>
-			  <div>        
-			 {/* -------------------- CREATE COLLECTION ----------------------------- */}
-            <h3>Create collection </h3>
-    
-			<form method="post" onSubmit={createCollectionSubmit}>
-			<label>
-				Collection name: <input name="collectionName"/>
-			</label>
-			<label>
-				Collection URI: <input name="collectionURI"/>
-			</label>
-			 <label>
-				Collection card count: <input name="collectionCardCount"/>
-			</label>
-			 <button type="submit" > createCollection </button> 
-			</form>
-			</div>
+		
 	  <Container className="container mt-4">
+		  
+		  <h1 className="text-center mb-4">Mint page</h1>
       <h2 className="text-center mb-4">Available Collections</h2>
     
         

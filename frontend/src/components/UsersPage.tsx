@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { uuseState } from 'react';
 import { Card, Container, ListGroup, Col, Row } from 'react-bootstrap';
+
+const SERVER = "http://127.0.0.1:5001/"
 
 // Define types for User and Card
 interface CardType {
@@ -13,25 +15,56 @@ interface User {
 }
 
 // Mock data for users 
-const mockUsers: User[] = [
-  {
-    address: "0x1234...abcd",
-    cards: [
-      { id: "1",  images:  "https://via.placeholder.com/150" } ,
-      { id: "2", images:  "https://via.placeholder.com/150" } ,
-    ],
-  },
-  {
-    address: "0x5678...efgh",
-    cards: [
-      { id: "3",  images:  "https://via.placeholder.com/150" } ,
-      { id: "4",  images:  "https://via.placeholder.com/150" } ,
-    ],
-  },
-];
+// const mockUsers: User[] = [
+//   {
+//     address: "0x1234...abcd",
+//     cards: [
+//       { id: "1",  images:  "https://via.placeholder.com/150" } ,
+//       { id: "2", images:  "https://via.placeholder.com/150" } ,
+//     ],
+//   },
+//   {
+//     address: "0x5678...efgh",
+//     cards: [
+//       { id: "3",  images:  "https://via.placeholder.com/150" } ,
+//       { id: "4",  images:  "https://via.placeholder.com/150" } ,
+//     ],
+//   },
+// ];
 
 const MasterDetailView: React.FC = () => {
+  const [mockUsers, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState<User | null>(null); 
+
+  useEffect(() => {
+          const getUsers = async () => {
+          const resp = await fetch(
+              SERVER + "getUsers"
+            )
+          const data = await resp.json()
+          
+          const userData = Object.keys(data).map(
+              o => ({
+                address: data[o]["address"],
+                cards: data[o]["cards"].map(
+                    c => ({
+                      id: c,
+                      image: "https://images.pokemontcg.io/"+c.split("-")[0]+"/"+c.split("-")[1]+".png"
+                    })
+                  )
+              }) 
+            )
+          console.log(userData)
+          setUsers(userData)
+
+          console.log(data)
+        }
+        getUsers()
+  })
+
+
+
+  // getUsers()
 
   return (
     <Container fluid className="vh-100 d-flex">

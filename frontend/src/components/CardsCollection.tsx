@@ -34,6 +34,7 @@ const CardsCollection: React.FC = () => {
                     const account = accounts[0]
                     const signer = provider.getSigner()
                     setUserAccount(account)
+
                 }
             }
         }
@@ -46,11 +47,13 @@ const CardsCollection: React.FC = () => {
             const chainCollections = await chainresp.json()
 
             console.log(chainCollections)
+            
 
             const chainCollectionURIs = Object.keys(chainCollections).map(
                     k => chainCollections[k]["uri"]
                 )
             const chainCardURIs = chainCollections["all-card-URIs"]
+            setChainCards(chainCardURIs)
             console.log(chainCardURIs)
             // setChainCol(chainCollections)
             console.log(chainCollections)
@@ -95,7 +98,8 @@ const CardsCollection: React.FC = () => {
     const handleClick = async (cardId) => {
         // const { collectionId } = useParams<{ collectionId: string }>(); 
         const formData = new FormData()
-        if (userAccount==null) {return}
+        if (userAccount==null) {return}    
+        if (chainCards.indexOf(cardId) > 0)  {return}
         formData.append("address",userAccount)
         formData.append("tokenURI",cardId)
         formData.append("collectionId",collectionId)

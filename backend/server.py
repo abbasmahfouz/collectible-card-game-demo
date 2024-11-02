@@ -128,6 +128,21 @@ def getAllCollections():
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp
 
+@app.route("/getUsers")
+def getUsers():
+	users = contract.functions.getUsers().call()
+	ret = {}
+	for i in range(len(users)):
+		ret_object = {}
+		ret_object["address"] = users[i]
+		ret_object["cards"] = contract.functions.getUserCards(users[i]).call()
+		ret[i] = ret_object
+
+	# print(users)
+	resp = make_response(ret)
+	resp.headers['Access-Control-Allow-Origin'] = '*'
+	return resp 
+
 @app.route("/getCollectionURIs")
 def getCollectionURIS():
 	allCollectionURIs = contract.functions.getCollectionURIs().call()

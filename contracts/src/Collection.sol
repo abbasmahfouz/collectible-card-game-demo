@@ -58,6 +58,10 @@ contract Collection is ERC721URIStorage, Ownable {
     return cards[_tokenId];
   }
 
+  function getCardURI(Card memory card) external view returns (string memory) {
+    return card.tokenURI;
+  }
+
   function getCollectionURI() external view returns (string memory) {
     return collectionURI;
   }

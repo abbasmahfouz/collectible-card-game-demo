@@ -101,11 +101,11 @@ contract Main is Ownable{
    
   }
   // get cards of a user
-  function getUserCards(address _user) external view returns (Collection.Card[] memory) {
+  function getUserCards(address _user) external view returns (string[] memory) {
     uint[] memory tokenIds = getUserTokens(_user);
-    Collection.Card[] memory userCards = new Collection.Card[](tokenIds.length);
+    string[] memory userCards = new string[](tokenIds.length);
     for(uint i=0; i< tokenIds.length; i++){
-      userCards[i] = getCard(tokenIds[i]);
+      userCards[i] = getCard(tokenIds[i]).tokenURI;
     }
     return userCards;
   }
