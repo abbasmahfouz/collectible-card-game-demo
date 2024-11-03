@@ -191,7 +191,6 @@ header {
 }
 
 .cardContainer {
-  animation: dance 3s ease-in-out infinite; 
   transform-origin: center;
 }
 
@@ -200,6 +199,17 @@ header {
   cursor: pointer;
 }
 
+.dancing {
+  animation: dance 3s ease-in-out infinite; 
+}
+
+.grayedOut {
+  animation: none !important; 
+  transform: scale(0.8); 
+  filter: grayscale(100%); 
+  pointer-events: none;
+  opacity: 0.7;
+}
 
 /* Main content area */
 .content {

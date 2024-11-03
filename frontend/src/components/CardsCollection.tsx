@@ -132,12 +132,16 @@ const CardsCollection: React.FC = () => {
       ) : (
             <Row>
                     {cards.map((card) => (
-                        <Col key={card.cardId} sm={4} md={3} lg={2} className={`mb-4 ${styles.cardContainer}`}>
-                        <Card
-                            className={`shadow-sm ${styles.hoverCard} border-0`}  
+                        <Col
+                        key={card.cardId}
+                        sm={4}
+                        md={3}
+                        lg={2}
+                        className={`mb-4 ${styles.cardContainer} ${!card.onChain ? styles.dancing : ''}`} 
+                      ><Card
+                            className={`shadow-sm ${styles.hoverCard} ${card.onChain ? styles.grayedOut : ''} border-0`}
                             border={getColor(card.onChain)}
-                            onClick={() => handleClick(card.cardId)}
-                            style={{ cursor: 'pointer' }}
+                            onClick={() => !card.onChain && handleClick(card.cardId)}
                         >
                             <Card.Img
                                 variant="top"
