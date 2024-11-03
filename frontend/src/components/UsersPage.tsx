@@ -1,4 +1,4 @@
-import React, { uuseState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Container, ListGroup, Col, Row } from 'react-bootstrap';
 
 const SERVER = "http://127.0.0.1:5001/"
@@ -36,8 +36,7 @@ const MasterDetailView: React.FC = () => {
   const [mockUsers, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState<User | null>(null); 
 
-  useEffect(() => {
-          const getUsers = async () => {
+  const getUsers = async () => {
           const resp = await fetch(
               SERVER + "getUsers"
             )
@@ -59,11 +58,13 @@ const MasterDetailView: React.FC = () => {
 
           console.log(data)
         }
-        getUsers()
-  })
+
+  useEffect(() => {
+       getUsers()   
+  }, [])
 
 
-
+  console.log(mockUsers)
   // getUsers()
 
   return (
@@ -100,7 +101,7 @@ const MasterDetailView: React.FC = () => {
         <Col className="p-4 d-flex flex-column align-items-center overflow-auto">
           {selectedUser ? (
             <div className="w-100 text-center">
-            <h4 className="mb-4">Minted Cards for user {selectedUser.address}</h4>
+            <h4 className="mb-4">Minted Cards for user {selectedUser.address} </h4>
               <div className="d-flex flex-wrap justify-content-center">
                 {selectedUser.cards.map((card) => (
                   <Card 
@@ -116,7 +117,7 @@ const MasterDetailView: React.FC = () => {
                   onMouseLeave={(e) => {
                     e.currentTarget.style.transform = 'scale(1)';
                     e.currentTarget.style.boxShadow = 'none';}}>
-                    <Card.Img variant="top" src={card.images} />
+                    <Card.Img variant="top" src={card.image} />               
                   </Card>
                 ))}
               </div>
