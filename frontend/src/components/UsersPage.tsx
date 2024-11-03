@@ -68,18 +68,20 @@ const MasterDetailView: React.FC = () => {
   // getUsers()
 
   return (
-    <Container fluid className="vh-100 d-flex">
-      <Row>
+    <Container fluid className="d-flex" style={{ minHeight: '100vh' }}>
+      <Row className="flex-grow-1 d-flex">
         {/* Users List - Sidebar */}
-        <div
-        style={{
-          width: '400px', 
-          backgroundColor: '#f8f9fa',
-          padding: '20px',
-          overflowY: 'auto',
-        }}
-        className="vh-100"
-      ><h5>Users</h5>
+        
+        <Col
+          md={4}
+          className="d-flex flex-column "
+          style={{
+            backgroundColor: '#f8f9fa',
+            padding: '20px',
+            overflowY: 'auto',
+          }}
+        >
+      <h5>Users</h5>
           <ListGroup variant="flush">
             {mockUsers.map((user) => (
               <ListGroup.Item
@@ -95,7 +97,7 @@ const MasterDetailView: React.FC = () => {
               </ListGroup.Item>
             ))}
           </ListGroup>
-          </div>
+          </Col>
 
         {/* Detail View - Display Minted Cards */}
         <Col className="p-4 d-flex flex-column align-items-center overflow-auto">
