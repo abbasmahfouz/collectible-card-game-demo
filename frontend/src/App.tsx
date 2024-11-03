@@ -54,6 +54,7 @@ export const App = () => {
       
       <NavBar />
       <div className={styles.body}>
+      <div className={styles.content}>
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/collections" element={<CollectionsPage/>} />
@@ -64,6 +65,8 @@ export const App = () => {
       </Routes>
       </div>
       <Footer />
+      </div>
+      
     </Router>
   );
 }

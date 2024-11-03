@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Card, Spinner, Container, Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers'
-
+import styles from '../styles.module.css'
 const SERVER = "http://127.0.0.1:5001/"
 
 interface CardItem{
@@ -120,8 +120,8 @@ const CardsCollection: React.FC = () => {
     }
 
     return (
-        <Container>
-            <h2>Cards in {collectionName}</h2>
+        <Container className="container mt-4">
+            <h2 className="text-center mb-4">Cards in {collectionName}</h2>
             {isLoading ? (
         // show spinner while loading
         <Spinner animation="border" role="status" aria-label="Loading collections">
@@ -132,15 +132,21 @@ const CardsCollection: React.FC = () => {
       ) : (
             <Row>
                     {cards.map((card) => (
-                        <Col key={card.cardId} sm={6} md={4} lg={3} className="mb-4">
-                            <Card className="shadow-sm"
-                            border = {getColor(card.onChain)}
-
+                        <Col key={card.cardId} sm={4} md={3} lg={2} className={`mb-4 ${styles.cardContainer}`}>
+                        <Card
+                            className={`shadow-sm ${styles.hoverCard} border-0`}  
+                            border={getColor(card.onChain)}
                             onClick={() => handleClick(card.cardId)}
-                            style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
-                            >
-                                <Card.Img variant="top" src={card.imageUrl} alt={`Card ${card.cardId}`} />
-                            </Card>
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Card.Img
+                                variant="top"
+                                src={card.imageUrl}
+                                alt={`Card ${card.cardId}`}
+                                className={styles.cardImage}
+                            />
+
+                        </Card>
                             
                         </Col>
                     ))}

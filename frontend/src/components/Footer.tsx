@@ -8,9 +8,9 @@ import { Col, Row } from 'react-bootstrap';
 
 const Footer: React.FC = () => {
     return (
-        <footer >
+        <footer className={styles.footer}>
             <Container fluid>
-                <Row className={styles.footer}>
+                <Row >
                 <Col md={4}>
                 <a href="https://www.sorbonne-universite.fr/" target="_blank" rel="noopener noreferrer">   
                     Sorbonne Université

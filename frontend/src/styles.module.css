@@ -41,8 +41,8 @@ header {
   padding-top: 60px; 
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
+  min-height: 100vh;
 }
 
 /* navbar */
@@ -59,8 +59,9 @@ header {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); 
 
 }
-.navbar-brand, .nav-link {
+.navbar-brand, .navLink {
   color: #fff !important; /*  for text */
+  font-weight: bold;
 }
 
 .nav-link:hover {
@@ -72,25 +73,16 @@ header {
   font-size: 1.5rem;
 }
 
+.navbarTitle{
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: 'Press Start 2P', sans-serif;
+  color: #000;
+
+}
 .nav-link {
   font-size: 1.3rem;
   margin: 0 15px;
-}
-
-/* cards*/
-.hover-card {
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
-}
-
-.hover-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.card {
-  background: #ddd;
-  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 /* homepage */
@@ -111,7 +103,10 @@ header {
   animation: float 3s ease-in-out infinite;
   overflow: hidden;
 } 
-
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1px); }
+}
 .titleContainer {
   padding-left: 40px;
   margin-bottom: 20px; 
@@ -128,11 +123,11 @@ header {
 }
 
 .description {
-  font-size: 1.2rem;
-  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #3B4CCA;
   opacity: 0.9;
   margin-top: 10px;
-  padding-left: 40px;
   text-align: left;
 }
 
@@ -153,14 +148,14 @@ header {
   background-color: #3B4CCA;
 }
 
+
+/* footer */
 .footer {
   background-color: #3B4CCA; 
   color: #fff;
   text-align: center;
   padding: 20px 0;
   font-size: 0.9rem;
-  position: fixed;
-  bottom: 0;
   width: 100%;
 }
 
@@ -169,8 +164,47 @@ header {
   text-decoration: none;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+
+
+.pokemon-yellow {
+  background-color: #FFCB05 !important; 
+  color: #000; 
 }
 
+
+/* card effects */
+.cardImage {
+  width: 100%; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cardImage:hover {
+  transform: scale(1.1); 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); }
+
+@keyframes dance {
+  0% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-3px) rotate(-1deg); }
+  50% { transform: translateY(0px) rotate(1deg); }
+  75% { transform: translateY(3px) rotate(-1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.cardContainer {
+  animation: dance 3s ease-in-out infinite; 
+  transform-origin: center;
+}
+
+.hoverCard {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+
+/* Main content area */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 120px); }
+  

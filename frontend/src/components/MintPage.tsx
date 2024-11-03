@@ -134,7 +134,6 @@ const MintPage: React.FC = () => {
                 className="shadow-sm hover-card"
                 bg= {getColor(collection.onChain)}
                 onClick = {() => handleClick(collection.collectionID,collection.cName,collection.count)}
-                // when we click on a collection, go to the cards page of that collection
                 style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
               >
                 
