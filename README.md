@@ -4,15 +4,6 @@
 2. Run backend:
   2.1. from backend, activate .serverenv then "python3 -m flask --app server run -p 5001"
 
-# WHAT TO DO:
-
-1. Add functions to contracts to make interacting easier (e.g. get all cards, get all collections... in a way that is easy to read offchain)
-2. Add backend handlers for the rest of the functions we'll need
-3. Add frontend elements:
-  3.1. Homepage
-  3.2. All collections (and all cards)
-  3.3. Users
-  3.4. Create/mint new collection (& card)
 
 # Collectible Card Game
 
