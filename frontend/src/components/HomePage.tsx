@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
     const handleButtonClick = () => {
-        navigate('/collections');
+        navigate('/Shop');
     }
     return (
         <div className={styles.homepage}>

@@ -9,7 +9,7 @@ contract Collection is ERC721URIStorage, Ownable {
   string public collectionName;
   string public collectionURI;
   uint public cardCount;
-  uint private tokenIdCounter;
+  uint public tokenIdCounter;
   mapping(uint => Card) public cards; // mapping of token id to card
 
 
@@ -23,57 +23,52 @@ contract Collection is ERC721URIStorage, Ownable {
   struct Card{
     uint tokenId;
     string tokenURI;
+    uint sale;
+    uint price;
+  }
+
+  function getOwner(uint caid) external returns (address) {
+    return ownerOf(caid);
   }
   // Mint a new card with the next available 
   //token ID (unique identifier for every nft card owned by the user) 
   //and token URI (metadata of the card like img and card no)
   
   function mintCard(address _to, string memory _tokenURI) external onlyOwner returns (uint) {
-    require(tokenIdCounter < cardCount, "Token ID exceeds card count");
-    uint newTokenId = tokenIdCounter;
     _mint(_to, tokenIdCounter);
-    _setTokenURI(tokenIdCounter, _tokenURI);
-    cards[newTokenId] = Card(newTokenId, _tokenURI);
+    cards[tokenIdCounter] = Card(tokenIdCounter, _tokenURI, 0, 0);
     tokenIdCounter++;
-    return newTokenId;
+    return tokenIdCounter-1;
   }
 
-  // get the no of cards minted
-  function getMintedCardCount() external view returns (uint) {
-      return tokenIdCounter;
+  function listCard(uint id,uint p) external {
+    cards[id].sale=1;cards[id].price=p;
   }
 
-  // get the name of the collection
-  function getCollectionName() external view returns (string memory) {
-    return collectionName;
+  function colDesc() external view returns (string memory) {
+    return string(abi.encodePacked("{\"name\":\"",collectionName,"\",\"uri\":\"",collectionURI,"\",\"count\":\"",Strings.toString(cardCount),"\",\"current\":\"",Strings.toString(tokenIdCounter),"\"}"));
   }
-  // get the no of cards of the collection
-  function getCollectionCardCount() external view returns (uint) {
-    return cardCount;
+  
+  // function getAllCards() external view returns (uint[] memory, string[] memory) {
+  //   uint[]  memory allCardID= new uint[](tokenIdCounter);
+  //   string[] memory allCardURI= new string[](tokenIdCounter);
+  //   for (uint i=0;i<tokenIdCounter;i++) {
+  //     allCardID[i]=cards[i].tokenId;
+  //     allCardURI[i]=cards[i].tokenURI;
+  //   }
+  //   return (allCardID, allCardURI);
+  // }
+
+  function getCardById(uint id) external view returns (string memory) {
+    return string(abi.encodePacked(cards[id].tokenURI,"\", \"owner\":\"",Strings.toHexString(uint160(ownerOf(id)),20),"\",\"sale\": \"",Strings.toString(cards[id].sale),"\", \"price\":\"",Strings.toString(cards[id].price)));
+    // return cards[id].tokenURI;
   }
 
-  // 
-  function getCard(uint _tokenId) external view returns (Card memory) {
-    require(cards[_tokenId].tokenId == _tokenId, "Card does not exist");
-    return cards[_tokenId];
-  }
-
-  function getCardURI(Card memory card) external view returns (string memory) {
-    return card.tokenURI;
-  }
-
-  function getCollectionURI() external view returns (string memory) {
-    return collectionURI;
-  }
-
-  function getAllCards() external view returns (uint[] memory, string[] memory) {
-    uint[]  memory allCardID= new uint[](tokenIdCounter);
-    string[] memory allCardURI= new string[](tokenIdCounter);
-    for (uint i=0;i<tokenIdCounter;i++) {
-      allCardID[i]=cards[i].tokenId;
-      allCardURI[i]=cards[i].tokenURI;
-    }
-    return (allCardID, allCardURI);
+  function sellCard(address _to, uint id) payable external {
+    // if (b!=ownerOf(id)) {revert("unauthorized")}
+    address oldOwner = ownerOf(id);
+    payable(oldOwner).transfer(msg.value);
+    _transfer(oldOwner,_to,id);
   }
 
 }

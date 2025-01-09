@@ -1,233 +1,121 @@
-import React, {useEffect, useState } from 'react';
-import { Card, Spinner, Container, Row, Col } from 'react-bootstrap';
+import React, {useEffect, useState, useRef, createRef } from 'react';
+import { Accordion, Button, Card, Container, ListGroup, Col, Row, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-//import useWallet from '@/wallet/useWallet';
-import styles from '../styles.module.css'
-
+import { ethers } from 'ethers'
+import { contracts } from '@/contracts.json'
+import useWallet from '@/wallet/useWallet';
+import styles from './styles.module.css'
 
 const SERVER = "http://127.0.0.1:5001/"
+// const isLoading = false
+// const [collections, setCollections] = useState([]) 
+// var collections = []
 
-interface Collection{
-    collectionId: number;
-    cName: string;
-    imageUrl: string;
+const owneraddr = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+
+const Shop: React.FC = () => {
+  const wallet = useWallet()
+  const [collections, setCollections] = useState([])
+  const [selectedCollection, setSelectedCollection] = useState(null);
+  const [selectedCollectionIdx, setSelectedCollectionIdx] = useState(null); 
+  const [allBoosters, setBoosters] = useState([])
+  const [selectedCollectionBoosters, setSelectedCollectionBoosters] = useState([])
+  const [collectionCards, setCards] = useState([])
+  const [userAccount,setUserAccount] = useState("")
+  const [boughtCards,setBoughtCards] = useState([])
+  const [showSell,setShowSell] = useState(false)
+
+  const getCollections = async () => {
+    const resp = await fetch(SERVER+"getCollections")
+    const respJson = await resp.json()
+    console.log(respJson)
+    setCollections(Object.entries(respJson).map(o => o[1]))
+  }
+
+  const getCollectionCards = async (colId) => {
+    const resp = await fetch(SERVER+"getCollectionCards?colId="+colId)
+    const respJson = await resp.json()
+    console.log(respJson)
+
+    setCards(Object.entries(respJson).map(o => o[1]))
+  }
+
+  useEffect(() => {
+    getCollections()
+    // getWallet()
+  },[])
+
+  useEffect(() => {
+    selectedCollectionIdx!=null ? getCollectionCards(selectedCollectionIdx) : null
+  },[selectedCollection])
+
+
+  return (
+    <Container fluid className="d-flex" style={{ minHeight: '100vh' }}>
+      <Row className="flex-grow-1 d-flex">
+        {/* Users List - Sidebar */}
+        
+        <Col
+          md={4}
+          className="d-flex flex-column "
+          style={{
+            backgroundColor: '#f8f9fa',
+            padding: '20px',
+            overflowY: 'auto',
+          }}
+        >
+      <h5>Collections</h5>
+          <ListGroup variant="flush">
+            {collections.map((collection,index) => (
+              <ListGroup.Item
+                key={collection.uri}
+                action
+                active={selectedCollection?.uri === collection.uri}
+                onClick={() => {setSelectedCollection(collection);setSelectedCollectionIdx(index)}}
+                style={{ cursor: 'pointer', fontWeight: selectedCollection?.uri === collection.uri ? 'bold' : 'normal', 
+                backgroundColor: selectedCollection?.uri === collection.uri ? '#3B4CCA' : 'transparent'}}
+
+              >
+                {collection.name}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          </Col>
+
+        {/* Detail View - Display Minted Cards */}
+        <Col className="p-4 d-flex flex-column align-items-center overflow-auto">
+          {selectedCollection ? (
+            <div className="w-100 text-center">
+            <h4 className="mb-4">Cards in {selectedCollection.name} </h4>
+              <div >
+              <Row>
+              {
+                collectionCards.map((c,index) => (
+                    <Col sm={3} md={2} lg={3} className="mb-4">
+                    <Card>
+                    <Card.Img 
+                      variant="top"
+                      // src={getImageURLbyID(collection[1].uri.split("-")[1])}
+                      src = {"https://images.pokemontcg.io/"+selectedCollectionIdx+"/"+c.uri.split("-")[1]+".png"}
+                    />
+                    </Card>
+                    </Col>
+                  ))}
+              </Row>
+              </div>
+            </div>
+
+            
+          ) : (
+            <div className="d-flex justify-content-center align-items-center vh-100">
+
+            <h4 className="text-center">Select a collection to view available cards</h4>
+            </div>
+          )}
+        </Col>
+      </Row>
+    </Container>
+  );
 }
 
-// component that displays all the available collections
-
-const CollectionsPage: React.FC = () => {
-    //const { contract } = useWallet();
-    const navigateToPage = useNavigate();
-    const [collections, setCollections] = useState<Collection[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [colNames, setColNames] = useState([])
-    
-    // connect to the contract and get all the collection names
-    // const getAllCollections = async () => {
-    //     if (!contract){
-    //         setError("Contract not available");
-    //         setIsLoading(false);
-    //         return;
-    //     }
-    //     try{
-    //         // get all the collection names
-    //         const collectionNames = await contract.getCollectionNames();
-    //         // create a collection object for each collection name
-    //         const collectionData: Collection[] = collectionNames.map((name: string, index: number) => ({
-    //             collectionId: index,
-    //             cName: name,
-    //         }));
-    //         setCollections(collectionData);
-
-    //         // TODO: --------------- Appeler fonction l'API de TCG  ---------------
-
-    //     }catch(e){
-    //         setError("Failed to get collection names");
-    //         setIsLoading(false);
-    //         return;
-    //     }finally{
-    //         setIsLoading(false);
-    //     }
-    // };
-
-
-    // useEffect(() => {
-    //     getAllCollections();
-    // }, [contract]);
-
-
-        const getCollectionInfo = async () => {
-          try{
-            setIsLoading(true);
-            setError(null);
-
-            const resp = await fetch(SERVER+"getAllCollections");
-            if (!resp.ok) throw new Error("Failed to fetch collections");
-
-            const data = await resp.json()
-
-            console.log(data)
-
-            const collectionsDisplay = Object.keys(data).slice(0,-1).map(
-                          c => ({
-                            collectionId: data[c]['uri'],
-                            cName: c,
-                            imageUrl: "https://images.pokemontcg.io/"+data[c]["uri"]+"/symbol.png"
-                          }));
-
-            setCollections(collectionsDisplay)
-          } catch (e) {
-            setError("Failed to load collections. Please try again later.");
-        } finally {
-            setIsLoading(false); // Stop loading
-        }
-    };
-
-    useEffect(() => {
-        getCollectionInfo();
-    }, []);
-
-    const handleCollectionClick = (collectionId: number) => {
-      navigateToPage(`/collections/${collectionId}`);
-  };
-  
-    return (
-        <Container className="container mt-4">
-      <h2 className="text-center mb-4">Available Collections</h2>
-    
-        
-      {isLoading ? (
-        // show spinner while loading
-        <Spinner animation="border" role="status" aria-label="Loading collections">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      ) : error ? (
-        <div className="text-danger text-center">{error}</div>
-      ) : (
-        // show collections in cards bootstrap
-        <Row>
-          {collections.map((collection) => (
-            <Col key={collection.collectionId} sm={6} md={4} lg={3} className="mb-4">
-              <Card
-                className="shadow-sm hover-card"
-                // when we click on a collection, go to the cards page of that collection
-                onClick={() => handleCollectionClick(collection.collectionId)}
-                style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
-              >
-                <Card.Body className='d-flex align-items-center'>
-                  <img src={collection.imageUrl} 
-                  alt={`Collection ${collection.cName} Logo`} 
-                  style={{ width: '30px', height: '30px', marginRight: '10px' }} 
-                  />
-                  <Card.Title className="mb-0">{collection.cName}</Card.Title>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      )}
-
-    </Container>
-    );
-  };
-
-
-export default CollectionsPage;
-
-    // const createCollectionSubmit = async (e) => {
-    //     e.preventDefault()
-    //     const form = e.target
-    //     const formData = new FormData(form)
-
-    //     const resp = await fetch(
-    //     SERVER+"createCollection",
-    //     {
-    //         method: form.method,
-    //         body: formData
-    //         }
-    //     )
-    //     const data = await resp
-    // }
-
-    // const getCollectionNames = async () => {
-
-    //     const resp = await fetch(
-    //         SERVER+"getCollectionNames",
-    //         {
-    //         method: 'GET'
-    //         }
-    //     )
-    //     const data = await resp.json()
-    //     const ret = []
-    //     for (let k of Object.keys(data)) {
-    //     ret.push(data[k])
-    //     }
-    //     listNames(ret)
-    //     return ret
-    // }
-
-    // const mintCardSubmit = async (e) => {
-    //     e.preventDefault()
-    //     const form = e.target
-    //     const formData = new FormData(form)
-
-    //     const resp = await fetch(
-    //         SERVER+"mintCard",
-    //         {
-    //         method: 'POST',
-    //         body: formData
-    //         }
-    //     )
-    //     const data = await resp
-    // }
-
-    // const getAllCollections = async () => {
-    //     const resp = await fetch(
-    //         SERVER+"getAllCollections",
-    //         {
-    //         method: 'GET'
-    //         }
-    //     )
-    //     const data = await resp.json()
-    //     console.log(data)
-    // }
-
-    // // const [collections,setCollections] = useState([]);
-
-    // // getCollectionNames()
-    // // console.log(collections)
-    // const listNames = (collections: string[]) => {
-    //     if(collections.length === 0) {
-    //         setCollHTML(<p>No collections found</p>)
-    //     }
-    //     else{
-    //         const listItems = collections.map(name => <li> {name} </li>)
-    //         setCollHTML(<ul>{listItems}</ul>)
-    //     }
-    // } 
-    // // getCollectionNames()
-    // // const listedNames = listNames()
-
-    // return (
-    //     <div>        
-    //     {/* -------------------- CREATE COLLECTION ----------------------------- */}
-    
-    //       <h1>Create collection </h1>
-    
-    //       <form method="post" onSubmit={createCollectionSubmit}>
-    //       <label>
-    //         Collection name: <input name="collectionName"/>
-    //       </label>
-    //       <label>
-    //         Collection card count: <input name="collectionCardCount"/>
-    //       </label>
-    //       <button type="submit" > createCollection </button> 
-    //       </form>
-
-    //       <button onClick={getCollectionNames} > getCollectionNames </button> 
-    //       <button onClick={getAllCollections} > getAllCollections </button>
-    //       {collHTML}
-    //     </div>
-
-    //       );
+export default Shop;

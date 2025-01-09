@@ -108,7 +108,8 @@ const CardsCollection: React.FC = () => {
         SERVER+"mintCard",
         {
             method: 'POST',
-            body: formData
+            body: formData,
+            contentType: 'multipart/form-data'
             }
         )
         const data = await resp

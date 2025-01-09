@@ -24,7 +24,7 @@ const useAffect = (
   }, dependencies)
 }
 
-export const useWallet = () => {
+const useWallet = () => {
   const [details, setDetails] = useState<ethereum.Details>()
   const [contract, setContract] = useState<main.Main>()
   useAffect(async () => {
@@ -40,3 +40,5 @@ export const useWallet = () => {
     return { details, contract }
   }, [details, contract])
 }
+
+export default useWallet

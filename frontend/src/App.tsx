@@ -5,6 +5,9 @@ import CollectionsPage from './components/CollectionsPage';
 import MintPage from './components/MintPage';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+import AddBoosters from "./components/AddBoosters";
+import Shop from "./components/Shop";
+import Market from "./components/Marketplace";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import UsersPage from './components/UsersPage';
@@ -62,6 +65,8 @@ export const App = () => {
         {/*<Route path="/treasury/:collectionId" element={<MintPage/>} />*/}
         <Route path="/users" element={<UsersPage/>} />
         <Route path="/collections/:collectionId" element={<CardsCollection />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/marketplace" element={<Market />} />
       </Routes>
       </div>
       <Footer />
